@@ -29,6 +29,8 @@ while (my $line = <$INPUT>){
     }
     chomp $line;
     my @split = split(/$opts{d}/, $line);
+    (my $out_delimiter = $opts{d})=~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
+        #reverse quotemeta
     if (not %header){
         no warnings 'uninitialized';
         foreach my $col (@colnames){
@@ -40,7 +42,7 @@ while (my $line = <$INPUT>){
             }
             if ($i > $#split){
                 die "Could not identify column '$col' in header. Header was:\n" . 
-                    join($opts{d}, @split) . "\n";
+                    join($out_delimiter, @split) . "\n";
             }
             $header{$col} = $i;
         }
@@ -52,7 +54,7 @@ while (my $line = <$INPUT>){
     foreach my $col (@colnames){
         push @out, $split[$header{$col}];
     }
-    print join($opts{d}, @out) . "\n";
+    print join($out_delimiter, @out) . "\n";
 }
              
 
