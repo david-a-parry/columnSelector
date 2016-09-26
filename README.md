@@ -3,11 +3,11 @@
 Outputs columns by name from a delmimted text file.
 
 
-##Usage## 
+##Usage 
 
     ./columnSelector.pl input.tsv column1 [column2 column3 ... columnN] [options]
 
-##Options##
+##Options
     
     -d,--delimiter STRING
         Column delimiter to use. Default = tab ('\t').
@@ -25,7 +25,7 @@ Outputs columns by name from a delmimted text file.
         Show this message and exit
 
 
-##Examples##
+##Examples
 
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
     
@@ -35,7 +35,7 @@ Outputs columns by name from a delmimted text file.
 
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
 
-##Author##
+##Author
 
 David A. Parry
 
