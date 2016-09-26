@@ -92,7 +92,7 @@ Examples:
 
     ./columnSelector.pl input.csv name address telephone -d ',' -i
     
-    ./columnSelector.pl input.vcf CHROM POS ID INFO  -c '##'
+    ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
 
 Author
 
