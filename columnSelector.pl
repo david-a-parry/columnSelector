@@ -86,12 +86,13 @@ Options:
 
 Examples:
 
-    ./columnsSelector.pl input.tsv NAME ADDRESS TELEPHONE
+    ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
     
-    ./columnsSelector.pl input.csv NAME ADDRESS TELEPHONE -c ',' 
+    ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' 
 
-    ./columnsSelector.pl input.csv name address telephone -c ',' -i
-
+    ./columnSelector.pl input.csv name address telephone -d ',' -i
+    
+    ./columnSelector.pl input.vcf CHROM POS ID INFO  -c '##'
 
 Author
 
