@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 use Getopt::Long;
+use IO::Uncompress::Gunzip qw/ gunzip $GunzipError /;
 
 my %opts = 
 (
@@ -22,7 +23,14 @@ usage("File and at least one column ID must be given on the commandline\n") if @
 my $f = shift;
 my @colnames =  @ARGV;
 my %header = (); 
-open (my $INPUT, "<", $f) or die "Can't open $f for reading: $!\n";
+my $INPUT;
+if ($f =~ /\.gz$/){
+    $INPUT = new IO::Uncompress::Gunzip $f 
+          or die "IO::Uncompress::Gunzip failed while opening $f for reading:".
+          "\n$GunzipError";
+}else{
+    open ($INPUT, "<", $f) or die "Failed to open $f for reading: $! ";
+}
 while (my $line = <$INPUT>){
     if ($opts{c}){
         next if $line =~ /^$opts{c}/;
