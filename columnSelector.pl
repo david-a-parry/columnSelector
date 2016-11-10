@@ -8,6 +8,7 @@ my %opts =
 (
     d => "\t",
     c => "#",
+    q => '"',
 );
 GetOptions
 (
@@ -15,6 +16,7 @@ GetOptions
     'd|delimiter=s',
     'c|comment=s',
     'n|no_header',
+    'q|quotes=s',
     'i|ignore_case',
     'h|help',
 ) or usage("Syntax error in option spec\n");
@@ -31,14 +33,15 @@ if ($f =~ /\.gz$/){
 }else{
     open ($INPUT, "<", $f) or die "Failed to open $f for reading: $! ";
 }
+(my $out_delimiter = $opts{d})=~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
+    #reverse quotemeta
 while (my $line = <$INPUT>){
     if ($opts{c}){
         next if $line =~ /^$opts{c}/;
     }
     chomp $line;
-    my @split = split(/$opts{d}/, $line);
-    (my $out_delimiter = $opts{d})=~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
-        #reverse quotemeta
+    my @split = split(/$opts{d}/, $line);   
+    @split = rejoinQuotes(@split);
     if (not %header){
         no warnings 'uninitialized';
         foreach my $col (@colnames){
@@ -66,6 +69,25 @@ while (my $line = <$INPUT>){
 }
              
 
+##################################################
+sub rejoinQuotes{
+    my @joined = ();
+    my $quote_open = 0;
+    my @to_join = ();
+    foreach my $s (@_){
+        my $sq = () = $s =~ /"/g;   
+        if ($sq % 2 ){ #odd no. quotes in string
+            $quote_open = $quote_open ? 0 : 1;
+        }
+        if ($quote_open){
+            push @to_join, $s;
+        }else{
+            push @joined, join($out_delimiter, @to_join, $s);
+        }
+    }
+    return @joined;
+    
+}
 
 ##################################################
 sub usage{
@@ -87,6 +109,10 @@ Options:
     
     -n,--no_header
         Do not print header with output.
+    
+    -q,--quotes STRING
+        Character to interpret as a quote mark, wherein text enclosed by this character will not be split.
+        Defaults to "
     
     -i,--ignore_case
         Ignore case of column names.
