@@ -35,7 +35,9 @@ if ($f =~ /\.gz$/){
 }
 (my $out_delimiter = $opts{d})=~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
     #reverse quotemeta
+my $n = 0;
 while (my $line = <$INPUT>){
+    $n++;
     if ($opts{c}){
         next if $line =~ /^$opts{c}/;
     }
@@ -84,6 +86,10 @@ sub rejoinQuotes{
         }else{
             push @joined, join($out_delimiter, @to_join, $s);
         }
+    }
+    if ($quote_open){
+        warn "WARNING: Unclosed quotations after processing line $n\n";
+        push @joined, join($out_delimiter, @to_join);
     }
     return @joined;
     
