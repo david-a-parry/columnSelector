@@ -18,6 +18,10 @@ Outputs columns by name from a delmimted text file.
     -n,--no_header
         Do not print header with output.
     
+    -q,--quotes STRING
+        Character to interpret as a quote mark, wherein text enclosed by this character will not be split.
+        Defaults to "
+    
     -i,--ignore_case
         Ignore case of column names.
 
