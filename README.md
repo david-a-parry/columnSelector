@@ -39,6 +39,12 @@ Outputs columns by name from a delmimted text file.
 
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
 
+##Tests
+
+These scripts have been tested on Linux systems only (to date). To test on your
+system type 'prove' from within your installation directory in order to run the 
+tests provided.
+
 ##Author
 
 David A. Parry
