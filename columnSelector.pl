@@ -85,6 +85,7 @@ sub rejoinQuotes{
             push @to_join, $s;
         }else{
             push @joined, join($out_delimiter, @to_join, $s);
+            @to_join = ();
         }
     }
     if ($quote_open){
