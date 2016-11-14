@@ -1,7 +1,7 @@
 #!/use/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 158;
+use Test::More tests => 314;
 use FindBin qw($RealBin);
 
 BEGIN 
@@ -23,11 +23,19 @@ sub testFormat{
     my $delimiter = shift;
     my $format = shift;
     my $ext = shift;
+    testFile($delimiter, $format, "$RealBin/test_data/test.$ext");
+    testFile($delimiter, "gzipped $format", "$RealBin/test_data/test.$ext.gz");
+}
     
+##################################################
+sub testFile{
+    my $delimiter = shift;
+    my $format = shift;
+    my $file = shift;
     my @cols = qw/ Foo Bar Rhubarb Etc /;
     my %data = map { $_ => getData($_, $delimiter) } @cols;
     #one col at a time...
-    my $base_cmd =  "$script_prefix/columnSelector.pl $RealBin/test_data/test.$ext ";
+    my $base_cmd =  "$script_prefix/columnSelector.pl $file ";
     if ($delimiter ne "\t"){
         $base_cmd .= " -d '$delimiter'";
     }
