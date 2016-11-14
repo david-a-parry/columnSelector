@@ -104,9 +104,9 @@ sub usage{
 
 Extracts columns with given names from a delmited text file.
 
-Usage: $0 input.tsv column1 [column2 column3 ... columnN] [options]
+USAGE: $0 input.tsv column1 [column2 column3 ... columnN] [options]
 
-Options:
+OPTIONS:
     
     -d,--delimiter STRING
         Column delimiter to use. Default = tab ('\\t').
@@ -127,7 +127,7 @@ Options:
     -h,--help
         Show this message and exit
 
-Examples:
+EXAMPLES:
 
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
     
@@ -137,11 +137,27 @@ Examples:
     
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
 
-Author
+AUTHOR
 
     David A. Parry
 
-=cut
+COPYRIGHT AND LICENSE
+
+    Copyright 2016  David A. Parry
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 EOT
     ;
