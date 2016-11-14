@@ -1,7 +1,7 @@
 #!/use/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 314;
+use Test::More tests => 242;
 use FindBin qw($RealBin);
 
 BEGIN 
@@ -56,12 +56,6 @@ sub testFile{
         all_cols => \@cols, 
     );
     @cols = reverse(@cols);
-    doColCombinations
-    (
-        %base_args,
-        all_cols => \@cols, 
-    );
-    @cols = map { $cols[$_] } 1, 2, 0, 3;
     doColCombinations
     (
         %base_args,
