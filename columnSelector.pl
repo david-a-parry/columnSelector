@@ -27,7 +27,7 @@ my @colnames =  @ARGV;
 my %header = (); 
 my $INPUT;
 if ($f =~ /\.gz$/){
-    $INPUT = new IO::Uncompress::Gunzip $f 
+    $INPUT = new IO::Uncompress::Gunzip $f, MultiStream => 1
           or die "IO::Uncompress::Gunzip failed while opening $f for reading:".
           "\n$GunzipError";
 }else{
