@@ -77,7 +77,7 @@ sub rejoinQuotes{
     my $quote_open = 0;
     my @to_join = ();
     foreach my $s (@_){
-        my $sq = () = $s =~ /"/g;   
+        my $sq = () = $s =~ /$opts{q}/g;   
         if ($sq % 2 ){ #odd no. quotes in string
             $quote_open = $quote_open ? 0 : 1;
         }
