@@ -119,7 +119,7 @@ OPTIONS:
     
     -q,--quotes STRING
         Character to interpret as a quote mark, wherein text enclosed by this character will not be split.
-        Defaults to "
+        Defaults to '"'
     
     -i,--ignore_case
         Ignore case of column names.
