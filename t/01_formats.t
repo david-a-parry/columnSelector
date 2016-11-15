@@ -1,7 +1,7 @@
 #!/use/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 242;
+use Test::More tests => 494;
 use FindBin qw($RealBin);
 
 BEGIN 
@@ -61,7 +61,7 @@ sub testFile{
         %base_args,
         all_cols => \@cols, 
     );
-    @cols = map { $cols[$_] } 1, 2, 0, 3;
+    @cols = map { $cols[$_] } 2, 1 ;
     doColCombinations
     (
         %base_args,
@@ -91,6 +91,14 @@ sub testTheseCols{
                "' columns from $args{format} data";
     my $cmd = "$args{cmd} " . join(" ", @{$args{cols}});
     testCmd($cmd, $exp, $desc);
+    my @uc = map { uc($_) } @{$args{cols}};
+    $cmd = "$args{cmd} -i " . join(" ", @uc);
+    $desc = "get '". 
+            (join(", ", @uc)) . 
+            "' columns (case-insensitive) from $args{format} data";
+    testCmd($cmd, $exp, "$desc case-insensitive");
+    $cmd = "$args{cmd} " . join(" ", @uc);
+    failTest($cmd, "fail to find columns (case-sensitive) for " .join(", ", @uc));
 }
 
 ##################################################
@@ -132,6 +140,17 @@ sub getData{
     return $all;
 }
 
+##################################################
+sub failTest{
+    my ($cmd, $description) = @_;
+    my $output = `$cmd 2>&1`;
+    ok
+    (
+        $? > 0,
+        $description,
+    );
+    $n_tests++; 
+}
 ##################################################
 sub testCmd{
     my ($cmd, $expected, $description) = @_;
