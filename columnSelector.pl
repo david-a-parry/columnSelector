@@ -14,6 +14,7 @@ GetOptions
 (
     \%opts,
     'd|delimiter=s',
+    'r|replace_delimiter=s',
     'c|comment=s',
     'n|no_header',
     'q|quotes=s',
@@ -33,7 +34,10 @@ if ($f =~ /\.gz$/){
 }else{
     open ($INPUT, "<", $f) or die "Failed to open $f for reading: $! ";
 }
-(my $out_delimiter = $opts{d})=~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
+(my $delimiter = $opts{d}) =~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
+    #reverse quotemeta
+my $out_delimiter = defined $opts{r} ? $opts{r} : $opts{d};
+$out_delimiter =~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
     #reverse quotemeta
 my $n = 0;
 while (my $line = <$INPUT>){
@@ -55,7 +59,7 @@ while (my $line = <$INPUT>){
             }
             if ($i > $#split){
                 die "Could not identify column '$col' in header. Header was:\n" . 
-                    join($out_delimiter, @split) . "\n";
+                    join($delimiter, @split) . "\n";
             }
             $header{$col} = $i;
         }
@@ -65,7 +69,13 @@ while (my $line = <$INPUT>){
     }
     my @out = ();
     foreach my $col (@colnames){
-        push @out, $split[$header{$col}];
+	my $f = $split[$header{$col}];
+        if ($f =~ /$out_delimiter/){#enclose in quotes if contains our delimiter
+            if ($f !~ /^".+"$/){
+                $f = "\"$f\"";
+            }
+        }
+        push @out, $f;
     }
     print join($out_delimiter, @out) . "\n";
 }
@@ -84,13 +94,13 @@ sub rejoinQuotes{
         if ($quote_open){
             push @to_join, $s;
         }else{
-            push @joined, join($out_delimiter, @to_join, $s);
+            push @joined, join($delimiter, @to_join, $s);
             @to_join = ();
         }
     }
     if ($quote_open){
         warn "WARNING: Unclosed quotations after processing line $n\n";
-        push @joined, join($out_delimiter, @to_join);
+        push @joined, join($delimiter, @to_join);
     }
     return @joined;
     
@@ -124,6 +134,9 @@ OPTIONS:
     -i,--ignore_case
         Ignore case of column names.
 
+    -r,--replace_delimiter STRING
+        Use this delimiter in output instead of input delimiter.
+
     -h,--help
         Show this message and exit
 
@@ -133,9 +146,13 @@ EXAMPLES:
     
     ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' 
 
+    ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' -r '\\t' > output.tsv
+
     ./columnSelector.pl input.csv name address telephone -d ',' -i
     
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
+    
+   
 
 AUTHOR
 

@@ -8,7 +8,7 @@ Outputs columns by name from a delmimted text file.
     ./columnSelector.pl input.tsv column1 [column2 column3 ... columnN] [options]
 
 ##Options
-    
+
     -d,--delimiter STRING
         Column delimiter to use. Default = tab ('\t').
     
@@ -25,6 +25,9 @@ Outputs columns by name from a delmimted text file.
     -i,--ignore_case
         Ignore case of column names.
 
+    -r,--replace_delimiter STRING
+        Use this delimiter in output instead of input delimiter.
+
     -h,--help
         Show this message and exit
 
@@ -34,6 +37,8 @@ Outputs columns by name from a delmimted text file.
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
     
     ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' 
+
+    ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' -r '\\t' > output.tsv
 
     ./columnSelector.pl input.csv name address telephone -d ',' -i
 
