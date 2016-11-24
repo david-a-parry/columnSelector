@@ -19,6 +19,7 @@ GetOptions
     'n|no_header',
     'q|quotes=s',
     'i|ignore_case',
+    'g|get_col_nums',
     'h|help',
 ) or usage("Syntax error in option spec\n");
 usage() if $opts{h};
@@ -66,6 +67,12 @@ while (my $line = <$INPUT>){
         if ($opts{n}){
             next;
         }
+    }
+    if ($opts{g}){
+        foreach my $col (@colnames){
+            print "$col: " . ($header{$col} + 1 ) . "\n";
+        }
+        exit;
     }
     my @out = ();
     foreach my $col (@colnames){
@@ -122,17 +129,23 @@ OPTIONS:
         Column delimiter to use. Default = tab ('\\t').
     
     -c,--comment STRING
-        Comment character - i.e. skip lines beginning like this. Default = '#'. Set to '' to disable.
+        Comment character - i.e. skip lines beginning like this. Default = '#'. 
+        Set to '' to disable.
     
     -n,--no_header
         Do not print header with output.
     
     -q,--quotes STRING
-        Character to interpret as a quote mark, wherein text enclosed by this character will not be split.
+        Character to interpret as a quote mark, wherein text enclosed by this 
+        character will not be split.
         Defaults to '"'
     
     -i,--ignore_case
         Ignore case of column names.
+
+    -g,--get_col_nums
+        Do not output columns but instead print a list of specified columns and 
+        their respective order in the header.
 
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.

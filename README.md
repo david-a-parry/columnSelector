@@ -8,28 +8,35 @@ Outputs columns by name from a delmimted text file.
     ./columnSelector.pl input.tsv column1 [column2 column3 ... columnN] [options]
 
 ##Options
-
+ 
     -d,--delimiter STRING
-        Column delimiter to use. Default = tab ('\t').
+        Column delimiter to use. Default = tab ('\\t').
     
     -c,--comment STRING
-        Comment character - i.e. skip lines beginning like this. Default = '#'. Set to '' to disable.
+        Comment character - i.e. skip lines beginning like this. Default = '#'. 
+        Set to '' to disable.
     
     -n,--no_header
         Do not print header with output.
     
     -q,--quotes STRING
-        Character to interpret as a quote mark, wherein text enclosed by this character will not be split.
+        Character to interpret as a quote mark, wherein text enclosed by this 
+        character will not be split.
         Defaults to '"'
     
     -i,--ignore_case
         Ignore case of column names.
+
+    -g,--get_col_nums
+        Do not output columns but instead print a list of specified columns and 
+        their respective order in the header.
 
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.
 
     -h,--help
         Show this message and exit
+
 
 
 ##Examples
