@@ -33,7 +33,8 @@ if ($f =~ /\.gz$/){
           or die "IO::Uncompress::Gunzip failed while opening $f for reading:".
           "\n$GunzipError";
 }else{
-    open ($INPUT, "<", $f) or die "Failed to open $f for reading: $! ";
+    #open ($INPUT, "<", $f) or die "Failed to open $f for reading: $! ";
+    open ($INPUT, $f) or die "Failed to open $f for reading: $! ";
 }
 (my $delimiter = $opts{d}) =~ s/((?:\\[a-zA-Z\\])+)/qq[qq[$1]]/ee;
     #reverse quotemeta
@@ -52,15 +53,22 @@ while (my $line = <$INPUT>){
     if (not %header){
         no warnings 'uninitialized';
         foreach my $col (@colnames){
+            my @tmp_split = ();
+            if ($col !~ /^["'].*['"]$/){
+                @tmp_split = map { (my $tmp = $_) =~ s/^["']//; $tmp } @split;
+                @tmp_split = map { s/["']$//; $_ } @tmp_split;
+            }else{
+                @tmp_split = @split;
+            }
             my $i = 0;
             if ($opts{i}){
-                $i++ until uc($split[$i]) eq uc($col) or $i > $#split;
+                $i++ until uc($tmp_split[$i]) eq uc($col) or $i > $#tmp_split;
             }else{
-                $i++ until $split[$i] eq $col or $i > $#split;
+                $i++ until $tmp_split[$i] eq $col or $i > $#tmp_split;
             }
-            if ($i > $#split){
+            if ($i > $#tmp_split){
                 die "Could not identify column '$col' in header. Header was:\n" . 
-                    join($delimiter, @split) . "\n";
+                    join($delimiter, @tmp_split) . "\n";
             }
             $header{$col} = $i;
         }
