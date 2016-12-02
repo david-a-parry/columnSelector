@@ -1,7 +1,7 @@
 #!/use/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 494;
+use Test::More;# tests => 494;
 use FindBin qw($RealBin);
 
 BEGIN 
@@ -15,7 +15,7 @@ my $script_prefix = "perl $RealBin/..";
 testFormat("\t", "tab separated",   "tsv");
 testFormat(",",  "comma separated", "csv");
 testFormat(" ",  "space separated", "ssv");
-
+testFile("\t", "all quoted", "$RealBin/test_data/test_quoted.tsv", 1);
 done_testing($n_tests);
 
 ##################################################
@@ -32,8 +32,9 @@ sub testFile{
     my $delimiter = shift;
     my $format = shift;
     my $file = shift;
+    my $quote_all = shift;
     my @cols = qw/ Foo Bar Rhubarb Etc /;
-    my %data = map { $_ => getData($_, $delimiter) } @cols;
+    my %data = map { $_ => getData($_, $delimiter, $quote_all) } @cols;
     #one col at a time...
     my $base_cmd =  "$script_prefix/columnSelector.pl $file ";
     if ($delimiter ne "\t"){
@@ -126,12 +127,13 @@ sub dataToCols{
 sub getData{
     my $f = shift;
     my $d = shift;
+    my $quote_all = shift;
     $f = "$RealBin/test_data/$f.txt";
     open (my $IN, $f) or die "Could not open test data $f: $!\n";
     my $all = '';
     while (my $data = <$IN>){
         chomp $data;
-        if ($data =~ /$d/ and $data !~ /^".+"$/){
+        if ( ($data =~ /$d/ or $quote_all ) and $data !~ /^".+"$/ ){
             $data = "\"$data\"";
         }
         $all .= "$data\n";
