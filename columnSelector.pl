@@ -55,8 +55,10 @@ while (my $line = <$INPUT>){
         foreach my $col (@colnames){
             my @tmp_split = ();
             if ($col !~ /^["'].*['"]$/){
+                #remove opening quotes
                 @tmp_split = map { (my $tmp = $_) =~ s/^["']//; $tmp } @split;
-                @tmp_split = map { s/["']$//; $_ } @tmp_split;
+                #remove closing quotes and any trailing whitespace
+                @tmp_split = map { s/["']\s*$//; $_ } @tmp_split;
             }else{
                 @tmp_split = @split;
             }
