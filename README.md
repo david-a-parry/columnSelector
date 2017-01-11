@@ -58,7 +58,7 @@ the analysis group. You can easily retrieve just those columns as follows:
         Use this delimiter in output instead of input delimiter.
 
     -h,--help
-        Show this message and exit
+        Show help information and exit
 
 
 
