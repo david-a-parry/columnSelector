@@ -1,8 +1,8 @@
-#columnSelector.pl
+# columnSelector.pl
 
 Outputs columns by name from a delmimted text file.
 
-##Why?
+## Why?
 
 You frequently encounter data presented in .tsv or .csv files with a **lot** of 
 columns and you want to process data from a subset of columns at the 
@@ -26,11 +26,11 @@ the analysis group. You can easily retrieve just those columns as follows:
     columnSelector.pl 20130502.phase3.analysis.sequence.index SAMPLE_ID FASTQ_FILE PAIRED_FASTQ ANALYSIS_GROUP
 
 
-##Usage 
+## Usage 
 
     ./columnSelector.pl input.tsv column1 [column2 column3 ... columnN] [options]
 
-##Options
+## Options
  
     -d,--delimiter STRING
         Column delimiter to use. Default = tab ('\\t').
@@ -62,7 +62,7 @@ the analysis group. You can easily retrieve just those columns as follows:
 
 
 
-##Examples
+## Examples
 
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
     
@@ -74,17 +74,17 @@ the analysis group. You can easily retrieve just those columns as follows:
 
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
 
-##Tests
+## Tests
 
 These scripts have been tested on Linux systems only (to date). To test on your
 system type 'prove' from within your installation directory in order to run the 
 tests provided.
 
-##Author
+## Author
 
 David A. Parry
 
-##COPYRIGHT AND LICENSE
+## COPYRIGHT AND LICENSE
 
     Copyright 2016  David A. Parry
 
