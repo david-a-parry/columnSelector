@@ -54,6 +54,10 @@ the analysis group. You can easily retrieve just those columns as follows:
         Do not output columns but instead print a list of specified columns and 
         their respective order in the header.
 
+    -l,--list_columns
+        Do not output columns but instead print the index and name of each 
+        column in the header. 
+
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.
 
