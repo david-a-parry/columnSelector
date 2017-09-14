@@ -20,10 +20,15 @@ GetOptions
     'q|quotes=s',
     'i|ignore_case',
     'g|get_col_nums',
+    'l|list_columns',
     'h|help',
 ) or usage("Syntax error in option spec\n");
 usage() if $opts{h};
-usage("File and at least one column ID must be given on the commandline\n") if @ARGV < 2;
+if ($opts{l} and @ARGV < 1){
+    usage("A file be given on the commandline\n");
+}elsif(not $opts{l} and @ARGV < 2){
+    usage("File and at least one column ID must be given on the commandline\n");
+}
 my $f = shift;
 my @colnames =  @ARGV;
 my %header = (); 
@@ -51,6 +56,13 @@ while (my $line = <$INPUT>){
     my @split = split(/$opts{d}/, $line);   
     @split = rejoinQuotes(@split);
     if (not %header){
+        if ($opts{l}){
+            my $n_length = length(scalar(@split) + 1);
+            for (my $i = 0; $i < @split; $i++){
+                printf("%${n_length}d: %s\n", $i + 1, $split[$i]);
+            }
+            exit;
+        }
         no warnings 'uninitialized';
         foreach my $col (@colnames){
             my @tmp_split = ();
@@ -156,6 +168,10 @@ OPTIONS:
     -g,--get_col_nums
         Do not output columns but instead print a list of specified columns and 
         their respective order in the header.
+
+    -l,--list_columns
+        Do not output columns but instead print the index and name of each 
+        column in the header. 
 
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.
