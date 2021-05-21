@@ -31,7 +31,8 @@ if ($opts{l} and @ARGV < 1){
 }
 my $f = shift;
 my @colnames =  @ARGV;
-my %header = (); 
+my %header = ();
+my @col_indices = ();
 my $INPUT;
 if ($f =~ /\.gz$/){
     $INPUT = new IO::Uncompress::Gunzip $f, MultiStream => 1
@@ -55,40 +56,35 @@ while (my $line = <$INPUT>){
     chomp $line;
     my @split = split(/$opts{d}/, $line);   
     @split = rejoinQuotes(@split);
-    if (not %header){
-        if ($opts{l}){
-            my $n_length = length(scalar(@split) + 1);
-            for (my $i = 0; $i < @split; $i++){
-                printf("%${n_length}d: %s\n", $i + 1, $split[$i]);
-            }
-            exit;
+    if ($opts{l}){
+        my $n_length = length(scalar(@split) + 1);
+        for (my $i = 0; $i < @split; $i++){
+            printf("%${n_length}d: %s\n", $i + 1, $split[$i]);
         }
-        no warnings 'uninitialized';
-        foreach my $col (@colnames){
-            my @tmp_split = ();
-            if ($col !~ /^["'].*['"]$/){
-                #remove opening quotes
-                @tmp_split = map { (my $tmp = $_) =~ s/^["']//; $tmp } @split;
-                #remove closing quotes and any trailing whitespace
-                @tmp_split = map { s/["']\s*$//; $_ } @tmp_split;
-            }else{
-                @tmp_split = @split;
-            }
-            my $i = 0;
-            if ($opts{i}){
-                $i++ until uc($tmp_split[$i]) eq uc($col) or $i > $#tmp_split;
-            }else{
-                $i++ until $tmp_split[$i] eq $col or $i > $#tmp_split;
-            }
-            if ($i > $#tmp_split){
-                die "Could not identify column '$col' in header. Header was:\n" . 
-                    join($delimiter, @tmp_split) . "\n";
-            }
-            $header{$col} = $i;
+        exit;
+    }
+    no warnings 'uninitialized';
+    foreach my $col (@colnames){
+        my @tmp_split = ();
+        if ($col !~ /^["'].*['"]$/){
+            #remove opening quotes
+            @tmp_split = map { (my $tmp = $_) =~ s/^["']//; $tmp } @split;
+            #remove closing quotes and any trailing whitespace
+            @tmp_split = map { s/["']\s*$//; $_ } @tmp_split;
+        }else{
+            @tmp_split = @split;
         }
-        if ($opts{n}){
-            next;
+        my $i = 0;
+        if ($opts{i}){
+            $i++ until uc($tmp_split[$i]) eq uc($col) or $i > $#tmp_split;
+        }else{
+            $i++ until $tmp_split[$i] eq $col or $i > $#tmp_split;
         }
+        if ($i > $#tmp_split){
+            die "Could not identify column '$col' in header. Header was:\n" . 
+                join($delimiter, @tmp_split) . "\n";
+        }
+        $header{$col} = $i;
     }
     if ($opts{g}){
         foreach my $col (@colnames){
@@ -96,10 +92,32 @@ while (my $line = <$INPUT>){
         }
         exit;
     }
+    if (not $opts{n}){
+        @col_indices = map{ $header{$_} } @colnames;
+        output_columns(\@col_indices, \@split);
+    }
+    last;
+}
+
+while (my $line = <$INPUT>){
+    $n++;
+    if ($opts{c}){
+        next if $line =~ /^$opts{c}/;
+    }
+    chomp $line;
+    my @split = split(/$opts{d}/, $line);   
+    @split = rejoinQuotes(@split);
+    output_columns(\@col_indices, \@split)
+}
+
+
+##################################################
+sub output_columns{
+    my ($indices, $cols) = @_;
     my @out = ();
-    foreach my $col (@colnames){
-	my $f = $split[$header{$col}];
-        if ($f =~ /$out_delimiter/){#enclose in quotes if contains our delimiter
+    foreach my $i (@$indices){
+        my $f = $cols->[$i];
+        if ($f =~ /$out_delimiter/){ #enclose in quotes if contains delimiter
             if ($f !~ /^".+"$/){
                 $f = "\"$f\"";
             }
