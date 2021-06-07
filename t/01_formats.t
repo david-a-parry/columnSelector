@@ -51,23 +51,23 @@ sub testFile{
         data       => \%data, 
         delimiter  => $delimiter, 
     );
-    doColCombinations
-    (
-        %base_args,
-        all_cols => \@cols, 
-    );
+#    doColCombinations
+#    (
+#        %base_args,
+#        all_cols => \@cols, 
+#    );
     @cols = reverse(@cols);
     doColCombinations
     (
         %base_args,
         all_cols => \@cols, 
     );
-    @cols = map { $cols[$_] } 2, 1 ;
-    doColCombinations
-    (
-        %base_args,
-        all_cols => \@cols, 
-    );
+    #    @cols = map { $cols[$_] } 2, 1 ;
+    #    doColCombinations
+    #    (
+    #        %base_args,
+    #        all_cols => \@cols, 
+    #    );
 }
 
 ##################################################
@@ -75,7 +75,7 @@ sub doColCombinations{
     my %args = @_;
     for (my $i = 0; $i < @{$args{all_cols}}; $i++){
         my @cols_to_test = ($args{all_cols}->[$i]);
-        for (my $j = 0; $j < @{$args{all_cols}}; $j++){
+        for (my $j = $i + 1; $j < @{$args{all_cols}}; $j++){
             next if $j == $i;
             push @cols_to_test, $args{all_cols}->[$j];
             testTheseCols(%args, cols => \@cols_to_test);
