@@ -184,7 +184,7 @@ OPTIONS:
         Ignore case of column names.
 
     -g,--get_col_nums
-        Do not output columns but instead print a list of specified columns and 
+        Do not output columns but instead print a your specified columns and 
         their respective order in the header.
 
     -l,--list_columns
@@ -209,6 +209,10 @@ EXAMPLES:
     
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
     
+    ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE -g
+
+    ./columnSelector.pl input.tsv -l
+
    
 
 AUTHOR

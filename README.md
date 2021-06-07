@@ -18,8 +18,7 @@ the sequence index files from the 1000 genomes project contain 26 columns but
 you may only be interested in the location of each file, the sample name and 
 the analysis group. You can easily retrieve just those columns as follows:
 
-    # get the file (alternatively substitute the filename in the second command with 
-    # '<(curl //ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index)'
+    # get the file
     wget ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/20130502.phase3.analysis.sequence.index
     
     # retrieve our columns of interest 
@@ -51,7 +50,7 @@ the analysis group. You can easily retrieve just those columns as follows:
         Ignore case of column names.
 
     -g,--get_col_nums
-        Do not output columns but instead print a list of specified columns and 
+        Do not output columns but instead print a your specified columns and 
         their respective order in the header.
 
     -l,--list_columns
@@ -77,6 +76,10 @@ the analysis group. You can easily retrieve just those columns as follows:
     ./columnSelector.pl input.csv name address telephone -d ',' -i
 
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
+
+    ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE -g
+
+    ./columnSelector.pl input.tsv -l
 
 ## Tests
 
