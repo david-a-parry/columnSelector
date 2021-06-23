@@ -92,8 +92,8 @@ while (my $line = <$INPUT>){
         }
         exit;
     }
+    @col_indices = map{ $header{$_} } @colnames;
     if (not $opts{n}){
-        @col_indices = map{ $header{$_} } @colnames;
         output_columns(\@col_indices, \@split);
     }
     last;
