@@ -54,7 +54,7 @@ while (my $line = <$INPUT>){
         next if $line =~ /^$opts{c}/;
     }
     chomp $line;
-    my @split = split(/$opts{d}/, $line);   
+    my @split = split(/$opts{d}/, $line, -1);
     @split = rejoinQuotes(@split);
     if ($opts{l}){
         my $n_length = length(scalar(@split) + 1);
@@ -105,7 +105,7 @@ while (my $line = <$INPUT>){
         next if $line =~ /^$opts{c}/;
     }
     chomp $line;
-    my @split = split(/$opts{d}/, $line);   
+    my @split = split(/$opts{d}/, $line, -1);
     @split = rejoinQuotes(@split);
     output_columns(\@col_indices, \@split)
 }
