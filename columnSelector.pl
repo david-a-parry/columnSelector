@@ -4,7 +4,7 @@ use warnings;
 use Getopt::Long;
 use IO::Uncompress::Gunzip qw/ gunzip $GunzipError /;
 
-my %opts = 
+my %opts =
 (
     d => "\t",
     c => "#",
@@ -81,7 +81,7 @@ while (my $line = <$INPUT>){
             $i++ until $tmp_split[$i] eq $col or $i > $#tmp_split;
         }
         if ($i > $#tmp_split){
-            die "Could not identify column '$col' in header. Header was:\n" . 
+            die "Could not identify column '$col' in header. Header was:\n" .
                 join($delimiter, @tmp_split) . "\n";
         }
         $header{$col} = $i;
@@ -126,7 +126,7 @@ sub output_columns{
     }
     print join($out_delimiter, @out) . "\n";
 }
-             
+
 
 ##################################################
 sub rejoinQuotes{
@@ -134,7 +134,7 @@ sub rejoinQuotes{
     my $quote_open = 0;
     my @to_join = ();
     foreach my $s (@_){
-        my $sq = () = $s =~ /$opts{q}/g;   
+        my $sq = () = $s =~ /$opts{q}/g;
         if ($sq % 2 ){ #odd no. quotes in string
             $quote_open = $quote_open ? 0 : 1;
         }
@@ -150,7 +150,6 @@ sub rejoinQuotes{
         push @joined, join($delimiter, @to_join);
     }
     return @joined;
-    
 }
 
 ##################################################
@@ -164,32 +163,32 @@ Extracts columns with given names from a delmited text file.
 USAGE: $0 input.tsv column1 [column2 column3 ... columnN] [options]
 
 OPTIONS:
-    
+
     -d,--delimiter STRING
         Column delimiter to use. Default = tab ('\\t').
-    
+
     -c,--comment STRING
-        Comment character - i.e. skip lines beginning like this. Default = '#'. 
+        Comment character - i.e. skip lines beginning like this. Default = '#'.
         Set to '' to disable.
-    
+
     -n,--no_header
         Do not print header with output.
-    
+
     -q,--quotes STRING
-        Character to interpret as a quote mark, wherein text enclosed by this 
+        Character to interpret as a quote mark, wherein text enclosed by this
         character will not be split.
         Defaults to '"'
-    
+
     -i,--ignore_case
         Ignore case of column names.
 
     -g,--get_col_nums
-        Do not output columns but instead print a your specified columns and 
+        Do not output columns but instead print a your specified columns and
         their respective order in the header.
 
     -l,--list_columns
-        Do not output columns but instead print the index and name of each 
-        column in the header. 
+        Do not output columns but instead print the index and name of each
+        column in the header.
 
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.
@@ -200,20 +199,20 @@ OPTIONS:
 EXAMPLES:
 
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE
-    
-    ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' 
+
+    ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ','
 
     ./columnSelector.pl input.csv NAME ADDRESS TELEPHONE -d ',' -r '\\t' > output.tsv
 
     ./columnSelector.pl input.csv name address telephone -d ',' -i
-    
+
     ./columnSelector.pl input.vcf '#CHROM' POS ID INFO  -c '##'
-    
+
     ./columnSelector.pl input.tsv NAME ADDRESS TELEPHONE -g
 
     ./columnSelector.pl input.tsv -l
 
-   
+
 
 AUTHOR
 
