@@ -21,6 +21,7 @@ GetOptions
     'i|ignore_case',
     'g|get_col_nums',
     'l|list_columns',
+    'e|empty_value=s',
     'h|help',
 ) or usage("Syntax error in option spec\n");
 usage() if $opts{h};
@@ -121,6 +122,8 @@ sub output_columns{
             if ($f !~ /^".+"$/){
                 $f = "\"$f\"";
             }
+        }elsif ($opts{e} and $f eq ""){
+            $f = $opts{e}
         }
         push @out, $f;
     }
@@ -192,6 +195,9 @@ OPTIONS:
 
     -r,--replace_delimiter STRING
         Use this delimiter in output instead of input delimiter.
+
+    -e,--empty_value STRING
+        Use this string to fill in any empty values in output.
 
     -h,--help
         Show this message and exit
